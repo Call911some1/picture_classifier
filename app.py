@@ -37,11 +37,13 @@ def load_model(model_name):
     if model_name == "ResNet-50":
         model = models.resnet50()
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
-        model.load_state_dict(torch.load('models/resnet50_eurosat.pth'))  # Используем относительный путь
+        # Явно указываем устройство 'map_location'
+        model.load_state_dict(torch.load('models/resnet50_eurosat.pth', map_location=torch.device('cpu')))
     elif model_name == "EfficientNet-B0":
         model = efficientnet_b0(weights=None)
         model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, num_classes)
-        model.load_state_dict(torch.load('models/efficientnet_b0_eurosat.pth'))  # Используем относительный путь
+        # Явно указываем устройство 'map_location'
+        model.load_state_dict(torch.load('models/efficientnet_b0_eurosat.pth', map_location=torch.device('cpu')))
     model.eval()
     return model
 
